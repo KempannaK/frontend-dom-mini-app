@@ -22,7 +22,8 @@ let taskDetailsInput = document.querySelector(".addTask form textarea");
 let taskCheckBox = document.querySelector("#check");
 
 
-var currentTask = [];
+function TodoList(){
+  var currentTask = [];
 
 if(localStorage.getItem('currentTask')){
         currentTask =JSON.parse(localStorage.getItem('currentTask'))
@@ -35,15 +36,26 @@ else{
 function renderTask() {
   let alltask = document.querySelector(".allTask");
   let sum = "";
-  currentTask.forEach(function (elem) {
+  currentTask.forEach(function (elem, idx) {
     sum =
       sum +
       `<div class="task">
                         <h5>${elem.task} <span class=${elem.imp}>imp</span></h5>
-                        <button>Mark as Completed</button>
+                        <button id=${idx}>Mark as Completed</button>
                     </div>`;
   });
   alltask.innerHTML = sum;
+  
+  localStorage.setItem('currentTask', JSON.stringify(currentTask))
+
+    let markcompleted = document.querySelectorAll('.task button')
+  markcompleted.forEach(function(btn){
+    btn.addEventListener('click', function(){  
+        currentTask.splice(btn.id, 1)
+        renderTask()
+      
+    })    
+})
 }
 renderTask()
 
@@ -59,4 +71,11 @@ form.addEventListener("submit", function (e) {
   taskDetailsInput.value = ''
   taskCheckBox.checked = false
   renderTask()
+  
 });
+
+}
+
+TodoList()
+
+  
